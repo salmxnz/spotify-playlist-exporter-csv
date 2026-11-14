@@ -79,11 +79,11 @@ def main():
     token = login(cid)
     pid = m.group(1)
     name = get(token, f"{API}/playlists/{pid}?fields=name")["name"]
-    url, rows = f"{API}/playlists/{pid}/tracks?limit=100", []
+    url, rows = f"{API}/playlists/{pid}/items?limit=100", []
     while url:
         page = get(token, url)
         for it in page["items"]:
-            t = it.get("track")
+            t = it.get("item") or it.get("track")
             if not t or not t.get("id"): continue  # local files / removed
             artists = ", ".join(x["name"] for x in t["artists"])
             term = q(f"{artists} {t['name']}")
